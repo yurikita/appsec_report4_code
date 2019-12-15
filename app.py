@@ -18,7 +18,7 @@ from models import User
 admin = User(uname = 'admin', mfa = '12345678901')
 admin.set_password('Administrator@1')
 db.session.add(admin)
-db.commit()
+db.session.commit()
 
 
 @app.route('/')
