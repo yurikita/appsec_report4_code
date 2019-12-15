@@ -1,0 +1,19 @@
+<html>
+	<head>
+		{% if title %}
+		<title>{{title}}</title>
+		{% else %}
+		<title>Spell Checker</title>
+		{% endif %}
+	</head>
+	<body>
+		<div>Spellcheck: 
+			<a href="/">Home</a>
+			<a href="/register">Register</a>
+			<a href="/login">Login</a>
+			<a href="/spell_check">Spell Check</a>
+		</div>
+		<hr>
+		{% block content %}{% endblock %}
+	</body>
+</html>
