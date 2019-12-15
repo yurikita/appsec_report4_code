@@ -15,10 +15,12 @@ login.init_app(app)
 from models import User
 
 #Initialize admin account
-admin = User(uname = 'admin', mfa = '12345678901')
-admin.set_password('Administrator@1')
-db.session.add(admin)
-db.session.commit()
+admin = User.query.filter_by(uname = 'admin').first()
+if admin is None:
+    admin = User(uname = 'admin', mfa = '12345678901')
+    admin.set_password('Administrator@1')
+    db.session.add(admin)
+    db.session.commit()
 
 
 @app.route('/')
