@@ -35,28 +35,28 @@ class TestCase(unittest.TestCase):
 
     def test_register(self):
         with self.client:
-            response = self.register('test2@nyu.edu', 'password', '000000000')
+            response = self.register('test2@nyu.edu', 'test', '1234')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'success\'>\n\t\tsuccess<br>", response.data)
     
     def test_password_failure_login(self):
         with self.client:
-            self.register('test@nyu.edu', 'password', '000000000')
-            response = self.login('test@nyu.edu', 'password0', '00000000')
+            self.register('test@nyu.edu', 'test', '1234')
+            response = self.login('test@nyu.edu', 'password0', '1234')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'result\'>\n\t\tIncorrect<br>", response.data)
 
     def test_2fa_failure_login(self):
         with self.client:
-            self.register('test@nyu.edu', 'password', '000000000')
+            self.register('test@nyu.edu', 'test', '1234')
             response = self.login('test@nyu.edu', 'password', '12345')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'result\'>\n\t\tTwo-factor failure", response.data)
 
     def test_login(self):
         with self.client:
-            self.register('test@nyu.edu', 'password', '000000000')
-            response = self.login('test@nyu.edu', 'password', '000000000')
+            self.register('test@nyu.edu', 'test', '1234')
+            response = self.login('test@nyu.edu', 'test', '1234')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'result\'>\n\t\tSuccess<br>", response.data)
 
