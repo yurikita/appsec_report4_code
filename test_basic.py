@@ -49,7 +49,7 @@ class TestCase(unittest.TestCase):
     def test_2fa_failure_login(self):
         with self.client:
             self.register('test@nyu.edu', 'test', '1234')
-            response = self.login('test@nyu.edu', 'password', '12345')
+            response = self.login('test@nyu.edu', 'test', '12345')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'result\'>\n\t\tTwo-factor failure", response.data)
 
@@ -67,14 +67,14 @@ class TestCase(unittest.TestCase):
 
     def test_register_twice(self):
         with self.client:
-            response = self.register('test2@nyu.edu', 'password', '000000000')
+            response = self.register('test2@nyu.edu', 'test2', '1234')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'success\'>\n\t\tfailure<br>", response.data)
 
     def test_spell_1(self):
         with self.client:
-            self.register('test@nyu.edu', 'password', '000000000')
-            self.login('test@nyu.edu', 'password', '000000000')
+            self.register('test@nyu.edu', 'test', '1234')
+            self.login('test@nyu.edu', 'test', '1234')
             response = self.spell_check('tests/test1.txt')
             self.assertEqual(response.status_code, 200)
             self.assertIn(b"id=\'textout\'>\n\t\tTake a sad sogn and make it better. Remember to let her under your skyn, then you begin to make it betta.\n", response.data)
