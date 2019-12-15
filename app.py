@@ -14,6 +14,13 @@ login.init_app(app)
 
 from models import User
 
+#Initialize admin account
+admin = User(uname = 'admin', mfa = '12345678901')
+admin.set_password('Administrator@1')
+db.session.add(admin)
+db.commit()
+
+
 @app.route('/')
 @app.route('/index')
 def index():
