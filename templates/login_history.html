@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Login History</h1>
+    {% if current_user.uname == 'admin' %}
+	<form action="" method="post" novalidate>
+		{{ form.hidden_tag() }}
+		<p id='userid'>
+			{{ form.userquery.label }}<br>
+			{{ form.userquery(size=32)}}	
+	   	</p>
+		<p>{{ form.submit() }}</p>
+	</form>
+	<h2 id='userid'>User: {{user}}</h2>
+	{% for login in loginqueries %}
+		<ul id = login{{login.id}}>
+			<li id=login{{login.id}}_time>{{login.login}}</li>
+			<li id=logout{{login.id}}_time>{{login.logout}}</li>
+		</ul>
+	{% endfor %}
+    {% endif %}
+{% endblock %}

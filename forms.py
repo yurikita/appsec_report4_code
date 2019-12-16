@@ -16,3 +16,7 @@ class LoginForm(FlaskForm):
 class SpellCheckForm(FlaskForm):
     inputtext = TextAreaField('Input Text')
     submit = SubmitField('Submit')
+
+class AdminHistoryForm(FlaskForm):
+    userquery = StringField('Username', [validators.DataRequired()])
+    submit = SubmitField('Submit')

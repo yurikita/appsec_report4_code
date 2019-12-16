@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1>Query Review</h1>
+	{% if (current_user.uname == query.uname) or (current_user.uname == 'admin') %}
+	<p id='username'>{{query.uname}}</p><br>
+	<p id='queryid'>{{query.id}}</p><br>
+	<p id='querytext'>{{query.inputtext}}</p><br>
+	<p id='queryresults'>{{query.misspelled}}</p><br>
+	{% endif %}
+{% endblock %}

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, session
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
-from forms import LoginForm, RegistrationForm, SpellCheckForm
+from forms import LoginForm, RegistrationForm, SpellCheckForm, AdminHistoryForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 import subprocess
 from datetime import datetime
@@ -100,6 +100,36 @@ def spell_check():
 
     return render_template("spell_check.html", title="Spell Check", form=form, textout=textout, misspelled=misspelled)
 
+@app.route('/history', methods = ['POST', 'GET'])
+@login_required
+def history():
+    form = AdminHistoryForm()
+    if form.validate_on_submit() and current_user.uname == 'admin':
+        queries = QueryHistory.query.filter_by(uname = form.userquery.data)
+        numqueries = queries.count()
+        user = form.userquery.data
+    else:
+        queries = QueryHistory.query.filter_by(uname = current_user.uname)
+        numqueries = queries.count()
+        user = current_user.uname
+    return render_template("history.html", title="History", form=form, user = user, numqueries=numqueries, queries=queries)
+
+@app.route('/history/query<id>')
+@login_required
+def query(id):
+    query = QueryHistory.query.filter_by(id=id).first()
+    return render_template("query.html", query=query)
+
+@app.route('/login_history', methods=['POST', 'GET'])
+@login_required
+def login_history():
+    form = AdminHistoryForm()
+    user = ''
+    loginqueries = []
+    if form.validate_on_submit() and current_user.uname == 'admin':
+        user = form.userquery.data
+        loginqueries = LoginHistory.query.filter_by(uname=form.userquery.data)
+    return render_template("login_history.html", form=form, user=user,loginqueries=loginqueries)
 
 if __name__ == '__main__':
     app.run(debug=True)

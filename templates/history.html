@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1>History</h1>
+	{% if current_user.uname == 'admin' %}
+	<form action="" method="post" novalidate>
+		{{ form.hidden_tag() }}
+		<p id='userquery'>
+			{{ form.userquery.label }}<br>
+			{{ form.userquery(size=32)}}	
+	   	</p>
+		<p>{{ form.submit() }}</p>
+	</form>
+	{% endif %}
+	<h2 id='user'>User: {{user}}</h2>
+	<p id='numqueries'>
+		{{ numqueries }}<br>
+	</p>
+	{% for query in queries %}
+	<p id = {{query.id}}>
+	<a href = "{{url_for('query', id=query.id)}}">{{query.timestamp}}: {{query.inputtext}}</a>
+	</p><br>
+	{% endfor %}
+{% endblock %}
