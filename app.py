@@ -4,15 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import LoginForm, RegistrationForm, SpellCheckForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 import subprocess
+from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-db.create_all()
 login = LoginManager(app)
 login.init_app(app)
 
-from models import User
+from models import User, QueryHistory, LoginHistory
+db.create_all()
 
 #Initialize admin account
 admin = User.query.filter_by(uname = 'admin').first()
@@ -21,7 +22,6 @@ if admin is None:
     admin.set_password('Administrator@1')
     db.session.add(admin)
     db.session.commit()
-
 
 @app.route('/')
 @app.route('/index')
@@ -61,11 +61,20 @@ def login():
         else:
             result = 'Success'
             login_user(user)
+            log = LoginHistory(uname=user.uname)
+            db.session.add(log)
+            db.session.commit()
+
     return render_template('login.html', title='Sign In', form=form, result=result)
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
+    log = LoginHistory.query.filter_by(uname = current_user.uname, logout = "N/A").first()
     logout_user()
+    log.logout = str(datetime.now())
+    db.session.add(log)
+    db.session.commit()
+
     return redirect('/login')
 
 
@@ -84,6 +93,11 @@ def spell_check():
             temp = temp.decode()
             misspelled = temp.replace('\n', ', ')[:-2]
             textout = inputtext
+
+            query = QueryHistory(uname=current_user.uname, inputtext=textout, misspelled=misspelled)
+            db.session.add(query)
+            db.session.commit()
+
     return render_template("spell_check.html", title="Spell Check", form=form, textout=textout, misspelled=misspelled)
 
 
