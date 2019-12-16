@@ -26,10 +26,7 @@ if admin is None:
 @app.route('/')
 @app.route('/index')
 def index():
-    if not current_user.is_authorized():
-        return redirect('/login')
-    else:
-        return redirect('/spell_check')
+    return redirect('/login')
 
 @app.route('/register', methods = ['POST', 'GET'])
 def register():
