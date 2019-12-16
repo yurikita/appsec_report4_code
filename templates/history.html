@@ -16,7 +16,7 @@
 		{{ numqueries }}<br>
 	</p>
 	{% for query in queries %}
-	<p id = {{query.id}}>
+	<p id = query{{query.id}}>
 	<a href = "{{url_for('query', id=query.id)}}">{{query.timestamp}}: {{query.inputtext}}</a>
 	</p><br>
 	{% endfor %}
