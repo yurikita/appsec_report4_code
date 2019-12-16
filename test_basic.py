@@ -62,6 +62,7 @@ class TestCase(unittest.TestCase):
 
     def test_logout(self):
         with self.client:
+            self.login('test@nyu.edu', 'test', '1234')
             response = self.logout()
             self.assertEqual(response.status_code, 200)
 
