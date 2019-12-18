@@ -19,7 +19,7 @@ db.create_all()
 admin = User.query.filter_by(uname = 'admin').first()
 if admin is None:
     admin = User(uname = 'admin', mfa = '12345678901')
-    admin.set_password(open("/run/secrets/admin_pass", "r").rstrip())
+    admin.set_password('Administrator@1')
     db.session.add(admin)
     db.session.commit()
 
